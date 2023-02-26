@@ -1,3 +1,5 @@
+#include "program.h"
+
 /* You will need to add your definitions of these functions below:
 
         int UPC_IsValid(char *);
