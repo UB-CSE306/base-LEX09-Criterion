@@ -2,22 +2,19 @@
 OS := $(shell uname -s)
 
 ifeq ($(OS), Darwin) 
-  CUNIT_PATH_PREFIX = /usr/local/Cellar/cunit/2.1-3/
-  CUNIT_DIRECTORY = cunit
+  INCLUDE_PATH := /opt/homebrew/Cellar/criterion/2.4.1_1/include
+  LIB_PATH := /opt/homebrew/Cellar/criterion/2.4.1_1/lib
 endif
 ifeq ($(OS), Linux) 
-  CUNIT_PATH_PREFIX = /util/CUnit/
-  CUNIT_DIRECTORY = CUnit/
+  INCLUDE_PATH := /util/criterion/include
+  LIB_PATH := /util/criterion/lib/x86_64-linux-gnu
 endif
 
 CC = gcc
-FLAGS = -g -Wall -std=c11
+CFLAGS = -Wall -std=c11 -ggdb
 
 program.o: program.c
 	$(CC) -c $(FLAGS) program.c
-
-test.o: test.c
-	$(CC) -c $(FLAGS) -I $(CUNIT_PATH_PREFIX)include/$(CUNIT_DIRECTORY) test.c
 
 program: program.o
 	$(CC) $(FLAGS) -o program program.o
@@ -25,9 +22,12 @@ program: program.o
 runner: runner.c program.o
 	$(CC) $(FLAGS) -o runner program.o runner.c
 
-tests: program.o test.o
-	gcc -Wall -L $(CUNIT_PATH_PREFIX)lib -I $(CUNIT_PATH_PREFIX)include/$(CUNIT_DIRECTORY) -o tests program.o test.o -lcunit
+tests.o: tests.c code.c
+	$(CC) -c $(DEBUG) $(CFLAGS) -I $(INCLUDE_PATH) tests.c
 
+tests:  program.o tests.o
+	$(CC) $(DEBUG) $(CFLAGS) -L $(LIB_PATH) -I $(INCLUDE_PATH) -o tests program.o tests.o -lcriterion
 
+.PHONY: clean
 clean:
 	rm -rf *~ *.o program tests runner *.dSYM
