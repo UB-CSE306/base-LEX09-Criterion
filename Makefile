@@ -13,21 +13,21 @@ endif
 CC = gcc
 CFLAGS = -Wall -std=c11 -ggdb
 
-program.o: program.c
+program.o: program.c program.h
 	$(CC) -c $(FLAGS) program.c
 
-program: program.o
-	$(CC) $(FLAGS) -o program program.o
+runner.o: runner.c program.h
+	$(CC) -c $(CFLAGS) runner.c
 
-runner: runner.c program.o
-	$(CC) $(FLAGS) -o runner program.o runner.c
-
-tests.o: tests.c code.c
+tests.o: tests.c program.h
 	$(CC) -c $(DEBUG) $(CFLAGS) -I $(INCLUDE_PATH) tests.c
+
+runner: program.o runner.o
+	$(CC) $(CFLAGS) -o runner program.o runner.o
 
 tests:  program.o tests.o
 	$(CC) $(DEBUG) $(CFLAGS) -L $(LIB_PATH) -I $(INCLUDE_PATH) -o tests program.o tests.o -lcriterion
 
 .PHONY: clean
 clean:
-	rm -rf *~ *.o program tests runner *.dSYM
+	rm -rf *~ *.o tests runner *.dSYM
