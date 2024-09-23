@@ -1,5 +1,3 @@
 # LEX09
 
-Add: run10, run13, runUPC (and tweak Makefile) so students can run those specific functions for easier debugging with gdb.
-
-Also make sure gdb + Criterion test post is up in Piazza.
+Remember to complete and submit [the form for this LEX](https://forms.office.com/Pages/ResponsePage.aspx?id=ikpGlu34sUCZ4l9rUKICULvi_w1JTR1FnU3_jSUEFttUOEQ5SFdOMVhQU0laT1daSlZWVjM4VzI3RS4u).
